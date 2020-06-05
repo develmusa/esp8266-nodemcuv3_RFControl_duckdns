@@ -7,7 +7,7 @@ Pin 16 send date (D0 on a nodeMCU board)
 Pin 2 receive data (D4 on a nodeMCU board)
 
 Setup:
-
+* Clone repo with submodules: ```git clone --recurse-submodules https://github.com/develmusa/esp8266-nodemcuv3_RFControl_duckdns.git```
 * Load all libraries from the libraries folder to the *Arduino/libraries* folder.
 * Flash esp8266 with the sketch
 * Connect to the RFControl wifi

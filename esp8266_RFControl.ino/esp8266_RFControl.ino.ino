@@ -6,13 +6,17 @@
 #include <DNSServer.h>
 #include <ESP8266WebServer.h>
 #include <WiFiManager.h>          //https://github.com/tzapu/WiFiManager
+#include <EasyDDNS.h>             //https://github.com/ayushsharma82/EasyDDNS
 
 #include <ArduinoJson.h>          //https://github.com/bblanchon/ArduinoJson
 
-#include <RFControl.h>
+#include <RFControl.h>            //https://github.com/develmusa/RFControl_esp8266.git
 
-const char* config_ssid = "RFControl";
+const char* config_ssid = "RFControls";
 const char* config_password = "lortnoCFR";
+
+const char* domain = "domain"; //from duckdns
+const char* token = "token"; //from duckdns
 
 //flag for saving data
 bool shouldSaveConfig = false;
@@ -115,11 +119,14 @@ void setup() {
 
   Serial.println("local ip:");
   Serial.println(WiFi.localIP());
+  EasyDDNS.service("duckdns");
+  EasyDDNS.client(domain,token); 
   
 }
 
 void loop() {
   server->handleClient();
+  EasyDDNS.update(10000);
 }
 
 
@@ -129,6 +136,7 @@ void handleReceive() {
   Serial.println("handleReceive()");
   String current_url = "http://";
   RFControl::startReceiving(RECEIVE_PIN);
+  Serial.println("handleReceive().start");
   while(1){
     //keep the watchdog happy
     ESP.wdtFeed();
@@ -217,4 +225,3 @@ void handleSend() {
   message += "</body></html>";
   server->send(200, "text/html", message);
 }
-
